@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder_app/widgets/reminder_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,8 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-  var size = MediaQuery.of(context).size;
-  var width = size.width;
+    var size = MediaQuery.of(context).size;
+    var width = size.width;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -30,44 +31,53 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(Icons.add),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(Icons.search),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.search),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(Icons.more_vert),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.more_vert),
                     ),
                   ],
                 ),
               ),
-              Container(
-                width: width*.6,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple.shade400,
-                  borderRadius: BorderRadius.circular(50)
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Icon(Icons.add,color: Colors.white,),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text("Write a reminder",style: TextStyle(color: Colors.white, fontSize: 16)),
-                    ),
-                  ],
+              const ReminderItem(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                child: Container(
+                  width: width * .6,
+                  decoration: BoxDecoration(
+                      color: Colors.deepPurple.shade400,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          "Write a reminder",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

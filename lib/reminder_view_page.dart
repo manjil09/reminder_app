@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class ReminderInterface extends StatefulWidget {
   const ReminderInterface({super.key});
@@ -9,6 +11,43 @@ class ReminderInterface extends StatefulWidget {
 
 class _ReminderInterfaceState extends State<ReminderInterface> {
   bool timeSelected = false;
+  var selectedDate = DateFormat('MMMMEEEEd').format(DateTime.now());
+  var selectedTime = DateFormat('jm').format(DateTime.now()).toString();
+
+  bool validTitle() {
+    return true;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = DateFormat('MMMMEEEEd').format(picked);
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    DateTime dateTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      picked!.hour,
+      picked.minute,
+    );
+    if (picked != selectedTime) {
+      setState(() {
+        selectedTime = DateFormat('jm').format(dateTime).toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -57,21 +96,37 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                       Visibility(
                         visible: timeSelected,
                         maintainSize: false,
-                        child: const Column(
+                        child: Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
-                                  Icon(Icons.notifications),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-                                    child: Text("Date Time"),
+                                  const Icon(Icons.notifications),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            12, 0, 0, 0),
+                                        child: PlainTextButton(
+                                          text: selectedDate,
+                                          onPressed: () => _selectDate(context),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            12, 0, 0, 0),
+                                        child: PlainTextButton(
+                                          text: selectedTime,
+                                          onPressed: () => _selectTime(context),
+                                        ),
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
@@ -83,7 +138,7 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                                 ],
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
@@ -94,7 +149,7 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                                   )
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -118,7 +173,7 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           )),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: !validTitle() ? null : () {},
                           child: const Text(
                             "Save",
                             style: TextStyle(

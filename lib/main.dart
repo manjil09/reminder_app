@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reminder_app/home_page.dart';
-import 'package:reminder_app/reminder_view_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
-      home: const ReminderInterface(),
+      home: const HomePage(),
     );
   }
 }
