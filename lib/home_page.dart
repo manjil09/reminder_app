@@ -11,8 +11,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var width = size.width;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -54,30 +52,15 @@ class _HomePageState extends State<HomePage> {
               const ReminderItem(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: Container(
-                  width: width * .6,
-                  decoration: BoxDecoration(
-                      color: Colors.deepPurple.shade400,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          "Write a reminder",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ],
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple.shade400,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(fontSize: 16),
                   ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.add),
+                  label: const Text("Write a reminder"),
                 ),
               ),
             ],

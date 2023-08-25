@@ -24,9 +24,10 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
+    var pickedDate = DateFormat('MMMMEEEEd').format(picked!);
+    if (pickedDate != selectedDate) {
       setState(() {
-        selectedDate = DateFormat('MMMMEEEEd').format(picked);
+        selectedDate = pickedDate;
       });
     }
   }
@@ -41,9 +42,10 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
       picked!.hour,
       picked.minute,
     );
-    if (picked != selectedTime) {
+    var pickedTime = DateFormat('jm').format(dateTime).toString();
+    if (pickedTime != selectedTime) {
       setState(() {
-        selectedTime = DateFormat('jm').format(dateTime).toString();
+        selectedTime = pickedTime;
       });
     }
   }
