@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:reminder_app/main.dart';
+import 'package:reminder_app/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Noti.initialize(flutterLocalNotificationsPlugin);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,7 +67,12 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.white,
                     textStyle: const TextStyle(fontSize: 16),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Noti.showBigTextNotification(
+                        title: "New message title",
+                        body: "Your long body",
+                        fln: flutterLocalNotificationsPlugin);
+                  },
                   icon: const Icon(Icons.add),
                   label: const Text("Write a reminder"),
                 ),
