@@ -5,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:reminder_app/database/reminder_table.dart';
+import 'package:reminder_app/widgets/reminder_item.dart';
 
 part 'database.g.dart';
 
@@ -22,11 +23,23 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future<List<ReminderData>> getReminderById(int id) {
-    return (select(reminder)..where((a) => a.id.equals(id))).get();
+    return (select(reminder)..where((tbl) => tbl.id.equals(id))).get();
   }
 
-  Future deleteOrder(ReminderData reminderData) =>
-      delete(reminder).delete(reminderData);
+  Future updateReminder(int id, ReminderData reminderData) {
+    return (update(reminder)..where((tbl) => tbl.id.equals(id))).write(
+      ReminderData(
+        title: reminderData.title,
+        id: reminderData.id,
+        isCompleted: reminderData.isCompleted,
+        timeSelected: reminderData.timeSelected,
+      ),
+    );
+  }
+
+  Future deleteReminderById(int id) {
+    return (delete(reminder)..where((tbl) => tbl.id.equals(id))).go();
+  }
 }
 
 LazyDatabase _openConnection() {

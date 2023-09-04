@@ -26,9 +26,10 @@ class _ReminderItemState extends State<ReminderItem> {
         child: Row(
           children: [
             Checkbox(
-              value: isCompleted,
+              value: widget.isCompleted,
               onChanged: (bool? value) {
                 setState(() {
+                  
                   isCompleted = value ?? false;
                   // Provider.of<MyDatabase>(context);
                 });
