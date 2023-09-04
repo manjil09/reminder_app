@@ -28,6 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  drift: ^2.9.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.0
+  path: ^1.8.3
   flutter_local_notifications: ^15.1.1
   provider: ^6.0.5
   intl: ^0.18.1
@@ -40,6 +44,8 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  drift_dev: ^2.9.0
+  build_runner: ^2.4.5
   flutter_test:
     sdk: flutter
 
