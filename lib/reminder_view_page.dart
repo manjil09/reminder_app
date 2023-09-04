@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class ReminderInterface extends StatefulWidget {
-  const ReminderInterface({super.key});
+  final MyDatabase database;
+  final ReminderData reminderData;
+  const ReminderInterface({super.key, required this.database, required this.reminderData});
 
   @override
   State<ReminderInterface> createState() => _ReminderInterfaceState();

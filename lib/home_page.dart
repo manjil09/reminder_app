@@ -80,8 +80,9 @@ class _HomePageState extends State<HomePage> {
                       child: ListView.builder(
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, index) {
-                          return ReminderItem(isCompleted: snapshot.data![index].isCompleted, title: snapshot.data![index].title,
-                            
+                          return ReminderItem(
+                            database: database,
+                            reminderData: snapshot.data![index],
                           );
                         },
                       ),
