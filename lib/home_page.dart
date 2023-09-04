@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:reminder_app/database/database.dart';
+import 'package:reminder_app/database/reminder_table.dart';
 import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
@@ -20,6 +23,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<MyDatabase>(context);
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -58,7 +63,34 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              const ReminderItem(),
+              StreamBuilder(
+                stream: database.watchAllReminder(),
+                builder: (context, AsyncSnapshot<List<ReminderData>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for data.
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // Handle errors, e.g., show an error message.
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // Handle the case where there is no data or it's empty.
+                    return const Center(child: Text('No reminders available.'));
+                  } else {
+                    // Render the list of reminders when data is available.
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: (context, index) {
+                          return ReminderItem(
+                            isCompleted: snapshot.data![index].isCompleted,
+                            title: snapshot.data![index].title,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: ElevatedButton.icon(

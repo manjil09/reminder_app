@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:reminder_app/reminder_view_page.dart';
 
 class ReminderItem extends StatefulWidget {
-  const ReminderItem({super.key});
+  final bool isCompleted;
+  final String title;
+  const ReminderItem({super.key, required this.isCompleted, required this.title});
 
   @override
   State<ReminderItem> createState() => _ReminderItemState();
@@ -28,10 +30,11 @@ class _ReminderItemState extends State<ReminderItem> {
               onChanged: (bool? value) {
                 setState(() {
                   isCompleted = value ?? false;
+                  // Provider.of<MyDatabase>(context);
                 });
               },
             ),
-            const Text("Item 1")
+            Text(widget.title)
           ],
         ),
       ),
