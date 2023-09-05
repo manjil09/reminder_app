@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
+import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class AddReminderInterface extends StatefulWidget {
   final MyDatabase database;
@@ -18,43 +19,33 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
   bool isTimeChanged = false;
   bool isTimeSelectionChanged = false;
   bool isTitleChanged = false;
-  // bool isTitleChanged = false;
+  bool timeSelected = false;
+  bool isCompleted = false;
+  DateTime dateAndTime = DateTime.now();
+  int count = 0;
+
   late String newTitle;
   late DateTime newDate;
   late TimeOfDay newTime;
 
-  late bool timeSelected;
-  late bool isCompleted;
-  late DateTime dateAndTime;
-  late String title;
-  late int id;
+  
   late String selectedDate;
   late String selectedTime;
-  late int count;
 
   @override
   void initState() {
     super.initState();
     getCount();
 
-    title = controller.text;
-    id = count+1;
-    dateAndTime = DateTime.now();
     selectedDate = DateFormat('MMMMEEEEd').format(dateAndTime);
     selectedTime = DateFormat('jm').format(dateAndTime).toString();
 
-    newTitle = title;
     newDate = dateAndTime;
     newTime = TimeOfDay.fromDateTime(dateAndTime);
-    controller.text = title;
   }
 
   Future<void> getCount() async{
     count = await widget.database.countRows();
-  }
-
-  bool validTitle() {
-    return true;
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -68,7 +59,6 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
       setState(() {
         newDate = picked;
         selectedDate = pickedDate;
-        // widget.database.updateReminder(id, reminderData)
       });
     }
     isDateChanged = true;
@@ -137,14 +127,6 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                         value: timeSelected,
                         onChanged: (bool value) {
                           setState(() {
-                            // widget.database.updateReminder(
-                            //   widget.reminderData.id,
-                            //   ReminderData(
-                            //       id: id,
-                            //       title: title,
-                            //       isCompleted: isCompleted,
-                            //       timeSelected: value),
-                            // );
                             timeSelected = value;
                             isTimeSelectionChanged = true;
                           });
@@ -259,10 +241,9 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
         newTime.hour,
         newTime.minute,
       );
-      widget.database.updateReminder(
-        id,
+      widget.database.addReminder(
         ReminderData(
-            id: id,
+            id: count+1,
             title: newTitle,
             isCompleted: isCompleted,
             timeSelected: timeSelected,
@@ -272,7 +253,6 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
     print(newTitle);
     print(newTime.hour);
     print(newDate.day);
-    print("$isTimeChanged $isDateChanged");
     print(count);
   }
 }
