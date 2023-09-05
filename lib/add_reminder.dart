@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
+import 'package:reminder_app/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class AddReminderInterface extends StatefulWidget {
@@ -28,7 +29,6 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
   late DateTime newDate;
   late TimeOfDay newTime;
 
-  
   late String selectedDate;
   late String selectedTime;
 
@@ -44,7 +44,7 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
     newTime = TimeOfDay.fromDateTime(dateAndTime);
   }
 
-  Future<void> getCount() async{
+  Future<void> getCount() async {
     count = await widget.database.countRows();
   }
 
@@ -96,7 +96,8 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
             children: [
               Container(
                 width: width,
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -214,6 +215,9 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                       TextButton(
                           onPressed: () {
                             saveButtonPressed();
+                            if (timeSelected) {
+                              setNotification();
+                            }
                             Navigator.pop(context);
                           },
                           child: const Text(
@@ -233,7 +237,10 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
   }
 
   void saveButtonPressed() {
-    if (isTimeChanged || isDateChanged || isTimeSelectionChanged || isTitleChanged) {
+    if (isTimeChanged ||
+        isDateChanged ||
+        isTimeSelectionChanged ||
+        isTitleChanged) {
       dateAndTime = DateTime(
         newDate.year,
         newDate.month,
@@ -243,16 +250,24 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
       );
       widget.database.addReminder(
         ReminderData(
-            id: count+1,
+            id: count + 1,
             title: newTitle,
             isCompleted: isCompleted,
             timeSelected: timeSelected,
             dateAndTime: dateAndTime),
       );
     }
-    print(newTitle);
-    print(newTime.hour);
-    print(newDate.day);
-    print(count);
+    // print(newTitle);
+    // print(newTime.hour);
+    // print(newDate.day);
+    // print(count);
+  }
+
+  void setNotification() {
+    print("notification set");
+    Noti().scheduleNotification(
+        title: newTitle,
+        body: "$selectedDate  $selectedTime",
+        scheduledDateTime: dateAndTime);
   }
 }

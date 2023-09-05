@@ -3,8 +3,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/home_page.dart';
+import 'package:reminder_app/notification_api.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Noti().initialize(flutterLocalNotificationsPlugin);
+  tz.initializeTimeZones();
   runApp(
     Provider(
       create: (context) => MyDatabase(),

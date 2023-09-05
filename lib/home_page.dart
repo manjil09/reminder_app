@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Noti.initialize(flutterLocalNotificationsPlugin);
+    // Noti.initialize(flutterLocalNotificationsPlugin);
   }
 
   @override
