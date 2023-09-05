@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
+import 'package:reminder_app/main.dart';
+import 'package:reminder_app/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class ReminderInterface extends StatefulWidget {
   final MyDatabase database;
   final ReminderData reminderData;
 
-  const ReminderInterface(
-      {super.key, required this.database, required this.reminderData,});
+  const ReminderInterface({
+    super.key,
+    required this.database,
+    required this.reminderData,
+  });
 
   @override
   State<ReminderInterface> createState() => _ReminderInterfaceState();
@@ -54,7 +59,7 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
     getCount();
   }
 
-  Future<void> getCount() async{
+  Future<void> getCount() async {
     count = await widget.database.countRows();
   }
 
@@ -111,7 +116,8 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
             children: [
               Container(
                 width: width,
-                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -237,6 +243,7 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                       TextButton(
                           onPressed: () {
                             saveButtonPressed();
+                            setNotification();
                             Navigator.pop(context);
                           },
                           child: const Text(
@@ -256,7 +263,10 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
   }
 
   void saveButtonPressed() {
-    if (isTimeChanged || isDateChanged || isTimeSelectionChanged || isTitleChanged) {
+    if (isTimeChanged ||
+        isDateChanged ||
+        isTimeSelectionChanged ||
+        isTitleChanged) {
       dateAndTime = DateTime(
         newDate.year,
         newDate.month,
@@ -274,10 +284,31 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
             dateAndTime: dateAndTime),
       );
     }
-    print(newTitle);
-    print(newTime.hour);
-    print(newDate.day);
-    print("$isTimeChanged $isDateChanged");
-    print(count);
+  }
+
+  void setNotification() async {
+    if (timeSelected) {
+
+      if (dateAndTime.isAfter(DateTime.now())) {
+        Noti().scheduleNotification(
+            id: count + 1,
+            title: newTitle,
+            body: "$selectedDate  $selectedTime",
+            scheduledDateTime: dateAndTime);
+      } else {
+        var scaffold = ScaffoldMessenger.of(context);
+        scaffold.showSnackBar(const SnackBar(
+          content: Center(
+              child: Text(
+            'The set Date and Time has already past',
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          )),
+          backgroundColor: Colors.grey,
+        ));
+      }
+    } else {
+      await flutterLocalNotificationsPlugin.cancel(count + 1);
+    }
   }
 }

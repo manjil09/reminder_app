@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
+import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
@@ -215,9 +216,7 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                       TextButton(
                           onPressed: () {
                             saveButtonPressed();
-                            if (timeSelected) {
-                              setNotification();
-                            }
+                            setNotification();
                             Navigator.pop(context);
                           },
                           child: const Text(
@@ -257,17 +256,30 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
             dateAndTime: dateAndTime),
       );
     }
-    // print(newTitle);
-    // print(newTime.hour);
-    // print(newDate.day);
-    // print(count);
   }
 
-  void setNotification() {
-    print("notification set");
-    Noti().scheduleNotification(
-        title: newTitle,
-        body: "$selectedDate  $selectedTime",
-        scheduledDateTime: dateAndTime);
+  void setNotification() async {
+    if (timeSelected) {
+      if (dateAndTime.isAfter(DateTime.now())) {
+        Noti().scheduleNotification(
+            id: count + 1,
+            title: newTitle,
+            body: "$selectedDate  $selectedTime",
+            scheduledDateTime: dateAndTime);
+      } else {
+        var scaffold = ScaffoldMessenger.of(context);
+        scaffold.showSnackBar(const SnackBar(
+          content: Center(
+              child: Text(
+            'The set Date and Time has already past',
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          )),
+          backgroundColor: Colors.grey,
+        ));
+      }
+    } else {
+      await flutterLocalNotificationsPlugin.cancel(count + 1);
+    }
   }
 }
