@@ -1,29 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reminder_app/add_reminder.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final MyDatabase database;
+  const HomePage({super.key, required this.database});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  int remainingReminder = 0;
   @override
   void initState() {
     super.initState();
-    // Noti.initialize(flutterLocalNotificationsPlugin);
+    getRemainingReminderCount();
+  }
+
+  // handleChange(){
+  //   print("home callbak");
+  //   getRemainingReminderCount();
+  //   setState(() {
+  //     remainingReminder = 20;
+  //   });
+  // }
+
+  Future<void> getRemainingReminderCount() async {
+    int count = await widget.database.countRemaining();
+    setState(() {
+      remainingReminder = count;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final database = Provider.of<MyDatabase>(context);
+    final database = widget.database;
+    // getRemainingReminderCount(database);
 
     return SafeArea(
       child: Scaffold(
@@ -31,15 +47,16 @@ class _HomePageState extends State<HomePage> {
           color: Colors.grey.shade100,
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 100),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 100),
                 child: Column(
                   children: [
-                    Text("Reminders",
+                    const Text("Reminders",
                         style: TextStyle(
                             fontSize: 40, fontWeight: FontWeight.w500)),
-                    Text("1 reminder/s remaining",
-                        style: TextStyle(fontSize: 14, color: Colors.grey)),
+                    Text("$remainingReminder reminder/s remaining",
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey)),
                   ],
                 ),
               ),
@@ -51,7 +68,9 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AddReminderInterface(database: database,)));
+                            builder: (context) => AddReminderInterface(
+                                  database: database,
+                                )));
                       },
                       icon: const Icon(Icons.add),
                     ),
@@ -85,6 +104,7 @@ class _HomePageState extends State<HomePage> {
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, index) {
                           return ReminderItem(
+
                             database: database,
                             reminderData: snapshot.data![index],
                           );
@@ -117,5 +137,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
   }
 }

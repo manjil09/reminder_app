@@ -9,7 +9,7 @@ class ReminderItem extends StatefulWidget {
   final MyDatabase database;
   final ReminderData reminderData;
   const ReminderItem(
-      {super.key, required this.database, required this.reminderData});
+      {super.key, required this.database, required this.reminderData,});
 
   @override
   State<ReminderItem> createState() => _ReminderItemState();

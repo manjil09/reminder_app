@@ -25,6 +25,14 @@ class MyDatabase extends _$MyDatabase {
     return result ?? 0;
   }
 
+  Future<int> countRemaining() async{
+    var countExp = countAll(filter: reminder.isCompleted.equals(false));
+
+    final query = selectOnly(reminder)..addColumns([countExp]);
+    var result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
+  }
+
   Future<int> addReminder(ReminderData reminderData) {
     return into(reminder).insert(reminderData);
   }
