@@ -5,7 +5,6 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:reminder_app/database/reminder_table.dart';
-import 'package:reminder_app/widgets/reminder_item.dart';
 
 part 'database.g.dart';
 
@@ -17,6 +16,14 @@ class MyDatabase extends _$MyDatabase {
 
   Future<List<ReminderData>> getAllReminder() => select(reminder).get();
   Stream<List<ReminderData>> watchAllReminder() => select(reminder).watch();
+
+  Future<int> countRows() async {
+    var countExp = reminder.id.count();
+
+    final query = selectOnly(reminder)..addColumns([countExp]);
+    var result = await query.map((row) => row.read(countExp)).getSingle();
+    return result ?? 0;
+  }
 
   Future<int> addReminder(ReminderData reminderData) {
     return into(reminder).insert(reminderData);
@@ -33,6 +40,7 @@ class MyDatabase extends _$MyDatabase {
         id: reminderData.id,
         isCompleted: reminderData.isCompleted,
         timeSelected: reminderData.timeSelected,
+        dateAndTime: reminderData.dateAndTime,
       ),
     );
   }

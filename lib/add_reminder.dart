@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
-import 'package:reminder_app/widgets/plain_text_button.dart';
 
-class ReminderInterface extends StatefulWidget {
+class AddReminderInterface extends StatefulWidget {
   final MyDatabase database;
-  final ReminderData reminderData;
-
-  const ReminderInterface(
-      {super.key, required this.database, required this.reminderData,});
+  const AddReminderInterface({super.key, required this.database});
 
   @override
-  State<ReminderInterface> createState() => _ReminderInterfaceState();
+  State<AddReminderInterface> createState() => _AddReminderInterfaceState();
 }
 
-class _ReminderInterfaceState extends State<ReminderInterface> {
+class _AddReminderInterfaceState extends State<AddReminderInterface> {
   var controller = TextEditingController();
 
   // Initialize with a default value
@@ -39,11 +35,11 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
   @override
   void initState() {
     super.initState();
-    timeSelected = widget.reminderData.timeSelected;
-    title = widget.reminderData.title;
-    id = widget.reminderData.id;
-    isCompleted = widget.reminderData.isCompleted;
-    dateAndTime = widget.reminderData.dateAndTime ?? DateTime.now();
+    getCount();
+
+    title = controller.text;
+    id = count+1;
+    dateAndTime = DateTime.now();
     selectedDate = DateFormat('MMMMEEEEd').format(dateAndTime);
     selectedTime = DateFormat('jm').format(dateAndTime).toString();
 
@@ -51,7 +47,6 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
     newDate = dateAndTime;
     newTime = TimeOfDay.fromDateTime(dateAndTime);
     controller.text = title;
-    getCount();
   }
 
   Future<void> getCount() async{

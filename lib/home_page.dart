@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder_app/add_reminder.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification_api.dart';
@@ -48,7 +49,10 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AddReminderInterface(database: database,)));
+                      },
                       icon: const Icon(Icons.add),
                     ),
                     IconButton(
