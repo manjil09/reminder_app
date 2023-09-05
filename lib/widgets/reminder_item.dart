@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
-import 'package:reminder_app/notification_api.dart';
+import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/reminder_view_page.dart';
 
 class ReminderItem extends StatefulWidget {
@@ -88,7 +88,11 @@ class _ReminderItemState extends State<ReminderItem> {
                 }
               },
             ),
-            Text(widget.reminderData.title)
+            Text(
+              widget.reminderData.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
-import 'package:reminder_app/notification_api.dart';
+import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class AddReminderInterface extends StatefulWidget {

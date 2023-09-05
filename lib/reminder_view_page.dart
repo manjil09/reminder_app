@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
-import 'package:reminder_app/notification_api.dart';
+import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class ReminderInterface extends StatefulWidget {
@@ -127,12 +127,19 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                 ),
                 child: TextField(
                   controller: controller,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
                   style: const TextStyle(fontSize: 30),
                   onChanged: (value) {
                     isTitleChanged = true;
                     newTitle = controller.text;
                   },
                 ),
+                // CustomTextField(controller: controller,)
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -148,14 +155,6 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                         value: timeSelected,
                         onChanged: (bool value) {
                           setState(() {
-                            // widget.database.updateReminder(
-                            //   widget.reminderData.id,
-                            //   ReminderData(
-                            //       id: id,
-                            //       title: title,
-                            //       isCompleted: isCompleted,
-                            //       timeSelected: value),
-                            // );
                             timeSelected = value;
                             isTimeSelectionChanged = true;
                           });
@@ -288,7 +287,6 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
 
   void setNotification() async {
     if (timeSelected) {
-
       if (dateAndTime.isAfter(DateTime.now())) {
         Noti().scheduleNotification(
             id: count + 1,

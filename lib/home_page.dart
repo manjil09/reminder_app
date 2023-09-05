@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder_app/add_reminder.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
-import 'package:reminder_app/notification_api.dart';
+import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
