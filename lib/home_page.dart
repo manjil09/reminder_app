@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reminder_app/add_reminder.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
+// import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
 
@@ -21,13 +22,10 @@ class _HomePageState extends State<HomePage> {
     getRemainingReminderCount();
   }
 
-  // handleChange(){
-  //   print("home callbak");
-  //   getRemainingReminderCount();
-  //   setState(() {
-  //     remainingReminder = 20;
-  //   });
-  // }
+  callback(){
+    getRemainingReminderCount();
+  }
+
 
   Future<void> getRemainingReminderCount() async {
     int count = await widget.database.countRemaining();
@@ -104,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, index) {
                           return ReminderItem(
-
+                            callback: callback,
                             database: database,
                             reminderData: snapshot.data![index],
                           );

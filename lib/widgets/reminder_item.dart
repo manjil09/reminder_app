@@ -8,8 +8,9 @@ import 'package:reminder_app/reminder_view_page.dart';
 class ReminderItem extends StatefulWidget {
   final MyDatabase database;
   final ReminderData reminderData;
+  final Function callback;
   const ReminderItem(
-      {super.key, required this.database, required this.reminderData,});
+      {super.key, required this.database, required this.reminderData, required this.callback,});
 
   @override
   State<ReminderItem> createState() => _ReminderItemState();
@@ -64,6 +65,7 @@ class _ReminderItemState extends State<ReminderItem> {
                         DateFormat('jm').format(dateAndTime).toString();
                     if (isCompleted) {
                       await flutterLocalNotificationsPlugin.cancel(id);
+                      // flutterLocalNotificationsPlugin.cancel(id);
                     } else {
                       if (dateAndTime.isAfter(DateTime.now())) {
                         Noti().scheduleNotification(
@@ -86,6 +88,7 @@ class _ReminderItemState extends State<ReminderItem> {
                     }
                   }
                 }
+                widget.callback();
               },
             ),
             Text(
