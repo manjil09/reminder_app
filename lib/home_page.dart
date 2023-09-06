@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:reminder_app/add_reminder.dart';
 import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
-// import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/reminder_item.dart';
 
@@ -32,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final database = widget.database;
-    // updateRemainingReminderCount(database);
 
     return SafeArea(
       child: Scaffold(
@@ -59,12 +57,15 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AddReminderInterface(
-                                  database: database, updateRemainingReminderCount: updateRemainingReminderCount,
-                                )));
-                      },
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AddReminderInterface(
+                            database: database,
+                            updateRemainingReminderCount:
+                                updateRemainingReminderCount,
+                          ),
+                        ),
+                      ),
                       icon: const Icon(Icons.add),
                     ),
                     IconButton(
@@ -115,12 +116,11 @@ class _HomePageState extends State<HomePage> {
                     foregroundColor: Colors.white,
                     textStyle: const TextStyle(fontSize: 16),
                   ),
-                  onPressed: () {
-                    Noti.showBigTextNotification(
-                        title: "New message title",
-                        body: "Your long body",
-                        fln: flutterLocalNotificationsPlugin);
-                  },
+                  onPressed: () => Noti.showBigTextNotification(
+                    title: "New message title",
+                    body: "Your long body",
+                    fln: flutterLocalNotificationsPlugin,
+                  ),
                   icon: const Icon(Icons.add),
                   label: const Text("Write a reminder"),
                 ),
@@ -130,6 +130,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-
   }
 }

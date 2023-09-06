@@ -4,19 +4,22 @@ import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
+import 'package:reminder_app/widgets/text_field.dart';
 
 class AddReminderInterface extends StatefulWidget {
   final MyDatabase database;
   final Function updateRemainingReminderCount;
-  const AddReminderInterface({super.key, required this.database, required this.updateRemainingReminderCount});
+  const AddReminderInterface({
+    super.key,
+    required this.database,
+    required this.updateRemainingReminderCount,
+  });
 
   @override
   State<AddReminderInterface> createState() => _AddReminderInterfaceState();
 }
 
 class _AddReminderInterfaceState extends State<AddReminderInterface> {
-  var controller = TextEditingController();
-
   // Initialize with a default value
   bool isDateChanged = false;
   bool isTimeChanged = false;
@@ -46,16 +49,15 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
     newTime = TimeOfDay.fromDateTime(dateAndTime);
   }
 
-  Future<void> getCount() async {
-    count = await widget.database.countRows();
-  }
+  Future<void> getCount() async => count = await widget.database.countRows();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: dateAndTime,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+      context: context,
+      initialDate: dateAndTime,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
     var pickedDate = DateFormat('MMMMEEEEd').format(picked!);
     if (pickedDate != selectedDate) {
       setState(() {
@@ -68,7 +70,9 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
-        context: context, initialTime: TimeOfDay.fromDateTime(dateAndTime));
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(dateAndTime),
+    );
     DateTime dateTime = DateTime(
       dateAndTime.year,
       dateAndTime.month,
@@ -86,6 +90,11 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
     isTimeChanged = true;
   }
 
+  textChanged(String newText) {
+    isTitleChanged = true;
+    newTitle = newText;
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -98,8 +107,10 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
             children: [
               Container(
                 width: width,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                  horizontal: 12,
+                ),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -107,14 +118,7 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                     bottomRight: Radius.circular(20),
                   ),
                 ),
-                child: TextField(
-                  controller: controller,
-                  style: const TextStyle(fontSize: 30),
-                  onChanged: (value) {
-                    isTitleChanged = true;
-                    newTitle = controller.text;
-                  },
-                ),
+                child: CustomTextField(textChanged: textChanged, title: ''),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -128,12 +132,10 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                       SwitchListTile(
                         title: const Text("Time"),
                         value: timeSelected,
-                        onChanged: (bool value) {
-                          setState(() {
-                            timeSelected = value;
-                            isTimeSelectionChanged = true;
-                          });
-                        },
+                        onChanged: (bool value) => setState(() {
+                          timeSelected = value;
+                          isTimeSelectionChanged = true;
+                        }),
                       ),
                       Visibility(
                         visible: timeSelected,
@@ -206,26 +208,30 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Cancel",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )),
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       TextButton(
-                          onPressed: () {
-                            saveButtonPressed();
-                            widget.updateRemainingReminderCount();
-                            setNotification();
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )),
+                        onPressed: () {
+                          saveButtonPressed();
+                          widget.updateRemainingReminderCount();
+                          setNotification();
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -251,11 +257,12 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
       );
       widget.database.addReminder(
         ReminderData(
-            id: count + 1,
-            title: newTitle,
-            isCompleted: isCompleted,
-            timeSelected: timeSelected,
-            dateAndTime: dateAndTime),
+          id: count + 1,
+          title: newTitle,
+          isCompleted: isCompleted,
+          timeSelected: timeSelected,
+          dateAndTime: dateAndTime,
+        ),
       );
     }
   }

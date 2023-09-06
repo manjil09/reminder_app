@@ -15,6 +15,7 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 
   Future<List<ReminderData>> getAllReminder() => select(reminder).get();
+  
   Stream<List<ReminderData>> watchAllReminder() => select(reminder).watch();
 
   Future<int> countRows() async {

@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
-      // home: const ParentWidget(),
       home: HomePage(database: Provider.of<MyDatabase>(context)),
     );
   }

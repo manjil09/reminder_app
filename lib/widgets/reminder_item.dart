@@ -9,8 +9,12 @@ class ReminderItem extends StatefulWidget {
   final MyDatabase database;
   final ReminderData reminderData;
   final Function callback;
-  const ReminderItem(
-      {super.key, required this.database, required this.reminderData, required this.callback,});
+  const ReminderItem({
+    super.key,
+    required this.database,
+    required this.reminderData,
+    required this.callback,
+  });
 
   @override
   State<ReminderItem> createState() => _ReminderItemState();
@@ -21,13 +25,12 @@ class _ReminderItemState extends State<ReminderItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ReminderInterface(
-                  database: widget.database,
-                  reminderData: widget.reminderData,
-                )));
-      },
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ReminderInterface(
+          database: widget.database,
+          reminderData: widget.reminderData,
+        ),
+      )),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -53,7 +56,6 @@ class _ReminderItemState extends State<ReminderItem> {
                   );
 
                   isCompleted = value;
-                  // Provider.of<MyDatabase>(context);
                 });
 
                 if (timeSelected) {
@@ -65,7 +67,6 @@ class _ReminderItemState extends State<ReminderItem> {
                         DateFormat('jm').format(dateAndTime).toString();
                     if (isCompleted) {
                       await flutterLocalNotificationsPlugin.cancel(id);
-                      // flutterLocalNotificationsPlugin.cancel(id);
                     } else {
                       if (dateAndTime.isAfter(DateTime.now())) {
                         Noti().scheduleNotification(
@@ -77,11 +78,12 @@ class _ReminderItemState extends State<ReminderItem> {
                         var scaffold = ScaffoldMessenger.of(context);
                         scaffold.showSnackBar(const SnackBar(
                           content: Center(
-                              child: Text(
-                            'The set Date and Time has already past',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
+                            child: Text(
+                              'The set Date and Time has already past',
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           backgroundColor: Colors.grey,
                         ));
                       }

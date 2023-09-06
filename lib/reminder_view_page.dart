@@ -4,11 +4,11 @@ import 'package:reminder_app/database/database.dart';
 import 'package:reminder_app/main.dart';
 import 'package:reminder_app/notification/notification_api.dart';
 import 'package:reminder_app/widgets/plain_text_button.dart';
+import 'package:reminder_app/widgets/text_field.dart';
 
 class ReminderInterface extends StatefulWidget {
   final MyDatabase database;
   final ReminderData reminderData;
-
   const ReminderInterface({
     super.key,
     required this.database,
@@ -20,14 +20,12 @@ class ReminderInterface extends StatefulWidget {
 }
 
 class _ReminderInterfaceState extends State<ReminderInterface> {
-  var controller = TextEditingController();
-
   // Initialize with a default value
   bool isDateChanged = false;
   bool isTimeChanged = false;
   bool isTimeSelectionChanged = false;
   bool isTitleChanged = false;
-  // bool isTitleChanged = false;
+
   late String newTitle;
   late DateTime newDate;
   late TimeOfDay newTime;
@@ -55,30 +53,25 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
     newTitle = title;
     newDate = dateAndTime;
     newTime = TimeOfDay.fromDateTime(dateAndTime);
-    controller.text = title;
     getCount();
   }
 
-  Future<void> getCount() async {
-    count = await widget.database.countRows();
-  }
+  Future<void> getCount() async => count = await widget.database.countRows();
 
-  bool validTitle() {
-    return true;
-  }
+  bool validTitle() => true;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: dateAndTime,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+      context: context,
+      initialDate: dateAndTime,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
     var pickedDate = DateFormat('MMMMEEEEd').format(picked!);
     if (pickedDate != selectedDate) {
       setState(() {
         newDate = picked;
         selectedDate = pickedDate;
-        // widget.database.updateReminder(id, reminderData)
       });
     }
     isDateChanged = true;
@@ -104,6 +97,11 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
     isTimeChanged = true;
   }
 
+  textChanged(String newText) {
+    isTitleChanged = true;
+    newTitle = newText;
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -125,40 +123,23 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                     bottomRight: Radius.circular(20),
                   ),
                 ),
-                child: TextField(
-                  controller: controller,
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  style: const TextStyle(fontSize: 30),
-                  onChanged: (value) {
-                    isTitleChanged = true;
-                    newTitle = controller.text;
-                  },
-                ),
-                // CustomTextField(controller: controller,)
+                child: CustomTextField(textChanged: textChanged, title: title),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     children: [
                       SwitchListTile(
                         title: const Text("Time"),
                         value: timeSelected,
-                        onChanged: (bool value) {
-                          setState(() {
-                            timeSelected = value;
-                            isTimeSelectionChanged = true;
-                          });
-                        },
+                        onChanged: (bool value) => setState(() {
+                          timeSelected = value;
+                          isTimeSelectionChanged = true;
+                        }),
                       ),
                       Visibility(
                         visible: timeSelected,
@@ -231,25 +212,25 @@ class _ReminderInterfaceState extends State<ReminderInterface> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Cancel",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )),
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                       TextButton(
-                          onPressed: () {
-                            saveButtonPressed();
-                            setNotification();
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Save",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          )),
+                        onPressed: () {
+                          saveButtonPressed();
+                          setNotification();
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
                 ),
