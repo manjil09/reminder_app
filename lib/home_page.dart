@@ -19,15 +19,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getRemainingReminderCount();
+    updateRemainingReminderCount();
   }
 
-  callback(){
-    getRemainingReminderCount();
-  }
-
-
-  Future<void> getRemainingReminderCount() async {
+  Future<void> updateRemainingReminderCount() async {
     int count = await widget.database.countRemaining();
     setState(() {
       remainingReminder = count;
@@ -37,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final database = widget.database;
-    // getRemainingReminderCount(database);
+    // updateRemainingReminderCount(database);
 
     return SafeArea(
       child: Scaffold(
@@ -67,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AddReminderInterface(
-                                  database: database,
+                                  database: database, updateRemainingReminderCount: updateRemainingReminderCount,
                                 )));
                       },
                       icon: const Icon(Icons.add),
@@ -102,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, index) {
                           return ReminderItem(
-                            callback: callback,
+                            callback: updateRemainingReminderCount,
                             database: database,
                             reminderData: snapshot.data![index],
                           );

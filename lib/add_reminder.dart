@@ -7,7 +7,8 @@ import 'package:reminder_app/widgets/plain_text_button.dart';
 
 class AddReminderInterface extends StatefulWidget {
   final MyDatabase database;
-  const AddReminderInterface({super.key, required this.database});
+  final Function updateRemainingReminderCount;
+  const AddReminderInterface({super.key, required this.database, required this.updateRemainingReminderCount});
 
   @override
   State<AddReminderInterface> createState() => _AddReminderInterfaceState();
@@ -216,6 +217,7 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
                       TextButton(
                           onPressed: () {
                             saveButtonPressed();
+                            widget.updateRemainingReminderCount();
                             setNotification();
                             Navigator.pop(context);
                           },
