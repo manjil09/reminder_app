@@ -55,7 +55,7 @@ class _AddReminderInterfaceState extends State<AddReminderInterface> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: dateAndTime,
-      firstDate: DateTime(2015, 8),
+      firstDate: DateTime(2023),
       lastDate: DateTime(2101),
     );
     var pickedDate = DateFormat('MMMMEEEEd').format(picked!);
